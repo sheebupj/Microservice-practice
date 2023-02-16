@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.paremal.educationservice.model.StudentDto;
 import com.paremal.educationservice.model.Students;
 import com.paremal.educationservice.repo.StudentRepo;
 import com.paremal.educationservice.repo.UserRepo;
@@ -16,6 +17,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 
+import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,19 +30,23 @@ public class EduServices {
 	
 	@Autowired
 	UserRepo userRepo;
+	@Autowired
+    private ModelMapper modelMapper;
 	
 	@GetMapping("/status")
 	public String getMessage() {
 		return "this implimentation is successfull!";
 	}
 	
-	@GetMapping("/allstudents")
+	@GetMapping("/all")
 	public List<Students> allStudents(){
 		return sudentRepo.findAll();
 	}
 	
 	@PostMapping("/addstudent")
-	public ResponseEntity<Students> addStudent(@RequestBody Students student) throws URISyntaxException{
+	public ResponseEntity<Students> addStudent(@RequestBody StudentDto studentDto) throws URISyntaxException{
+		LOGGER.info("***********************************************"+studentDto.toString());
+		Students student= modelMapper.map(studentDto, Students.class);
 	  Students savedStudent=sudentRepo.save(student);
 	  return ResponseEntity.created(new URI(savedStudent.getId().toString())).body(savedStudent);
 	}
