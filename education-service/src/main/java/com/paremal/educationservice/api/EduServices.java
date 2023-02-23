@@ -15,6 +15,8 @@ import com.paremal.educationservice.repo.UserRepo;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import org.modelmapper.ModelMapper;
@@ -35,11 +37,16 @@ public class EduServices {
 	
 	@GetMapping("/status")
 	public String getMessage() {
+		LOGGER.info("##################################"+"from get message");
 		return "this implimentation is successfull!";
 	}
 	
 	@GetMapping("/all")
 	public List<Students> allStudents(){
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");  
+		   LocalDateTime now = LocalDateTime.now();  
+		   System.out.println(dtf.format(now));
+		LOGGER.info("##################################"+"from all students:"+dtf.format(now));
 		return sudentRepo.findAll();
 	}
 	
